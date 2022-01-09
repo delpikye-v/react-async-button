@@ -1,6 +1,6 @@
 {
   "name": "react-async-button-z",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React. Simple lock button.",
   "main": "build/index.js",
   "module": "build/index.js",
@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
+    "react-flexbox-z": "^1.0.1",
     "styled-components": "^5.3.3"
   }
 }

@@ -47,7 +47,7 @@ const isFunc = func => typeof func === 'function'
 const AsyncButton = ({
     className,
     theme = 'ring',
-    color = '#000000',
+    indicatorColor = '#000000',
     isAsync = false,
     onClick,
     size = 10,
@@ -69,8 +69,8 @@ const AsyncButton = ({
 
     return (
         <button className={makeClassName()} onClick={handleClick} disabled={isFetch} {...props}>
-            {isFetch && <Loading color={color} size={size} theme={theme} />}
-            <div className="label">{loadingText || text}</div>
+            {isFetch && <Loading color={indicatorColor} size={size} theme={theme} />}
+            <div className="label">{isFetch ? loadingText || text : text}</div>
         </button>
     )
 }
@@ -80,7 +80,7 @@ export default AsyncButton
 AsyncButton.prototype = {
     className: PropsType.string,
     theme: PropsType.string,
-    color: PropsType.string,
+    indicatorColor: PropsType.string,
     isAsync: PropsType.bool,
     onClick: PropsType.func,
     size: PropsType.number,
