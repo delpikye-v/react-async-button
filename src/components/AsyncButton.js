@@ -15,6 +15,7 @@ const themeConfig = {
     hourglass: true
 }
 
+/** Theme type */
 const Loading = ({ theme, color, size }) => {
     const name = themeConfig[theme] ? theme : 'ring'
     switch (name) {
@@ -44,26 +45,41 @@ const Loading = ({ theme, color, size }) => {
 }
 const isFunc = func => typeof func === 'function'
 
+/**
+ * Case 1: Using isAsync (change state isAsync = true/false)
+ * Case 2: Using timeout (set timeout restore)
+ * Case 3: Using asyncFunc (pass a promise func)
+ */
 const AsyncButton = ({
     className,
     theme = 'ring',
     indicatorColor = '#000000',
-    isAsync = false,
+    isAsync = false, // case 1
     onClick,
-    size = 10,
+    size = 10, // size of indicator
     text = 'Button',
     loadingText,
-    timeout = 0, // when you don't use isAsync
+    timeout = 0, // case 2
+    asyncFunc, // case 3
     ...props
 }) => {
-    const [isFetch, setFetch] = useState()
+    const [isFetch, setFetch] = useState(false)
 
+    // case 1
     useEffect(() => setFetch(isAsync), [isAsync])
 
     const makeClassName = () => `button-async ${className || ''}`.trim()
     const handleClick = evt => {
         isFunc(onClick) && onClick(evt)
         setFetch(true)
+
+        // case 3
+        if (asyncFunc && isFunc(asyncFunc)) {
+            Promise.resolve(asyncFunc()).finally(() => setFetch(false))
+            return
+        }
+
+        // case 2
         timeout && setTimeout(() => setFetch(false), timeout * 1000)
     }
 
@@ -86,5 +102,6 @@ AsyncButton.prototype = {
     size: PropsType.number,
     text: PropsType.any,
     loadingText: PropsType.any,
-    timeout: PropsType.string
+    timeout: PropsType.string,
+    asyncFunc: PropsType.func
 }
